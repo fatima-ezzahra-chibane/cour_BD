@@ -1,0 +1,2738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cours complet – Base de Données | ISEEM</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome PRO -->
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css" />
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-solid.css" />
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-regular.css" />
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+         
+        }
+        .slide {
+            display: none;
+            min-height: 550px;
+            padding: 3rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .property-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .property-table th {
+            background: #059669;
+            color: white;
+            padding: 0.75rem;
+            font-weight: 600;
+        }
+        .property-table td {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        .property-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .mcd-entity {
+            border: 2px solid #059669;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f0fdf4;
+            display: inline-block;
+            min-width: 200px;
+        }
+        .mcd-entity h3 {
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #059669;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #059669;
+        }
+        .mcd-entity ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .mcd-entity li {
+            padding: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+        .mcd-entity li u {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        .association-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .cardinality {
+            background: #fbbf24;
+            color: #1e293b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+
+        <div id="slides" class="flex-grow">
+
+            <!-- ==================== SECTION 1 : INTRODUCTION ==================== -->
+
+            <!-- SLIDE 1 : TITRE PRINCIPAL -->
+            <div class="slide active">
+                <div class="text-center">
+                    <div class="relative mb-8">
+                        <i class="fa-sharp fa-solid fa-database text-8xl text-emerald-600"></i>
+                        <i class="fa-sharp fa-solid fa-diagram-project text-6xl text-teal-600 absolute -bottom-4 -right-4"></i>
+                        <i class="fa-sharp fa-solid fa-table text-6xl text-cyan-600 absolute -top-4 -left-4"></i>
+                    </div>
+
+                    <h1 class="text-6xl font-extrabold mb-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-transparent bg-clip-text">
+                        Base de Données
+                    </h1>
+                    <p class="text-2xl mb-6 text-gray-600">Conception et modélisation avec MERISE</p>
+                    
+                    <div class="max-w-2xl mx-auto bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-8 rounded-2xl shadow-xl mb-6">
+                        <div class="flex items-center justify-center gap-4 mb-4">
+                            <i class="fa-sharp fa-solid fa-graduation-cap text-5xl"></i>
+                            <i class="fa-sharp fa-solid fa-school text-5xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold mb-2">Fatima Ezzahra Chibane</h2>
+                        <p class="text-xl opacity-90 mb-4">Formatrice en Base de Données</p>
+                        <div class="border-t border-white/20 pt-4">
+                            <p class="text-2xl font-semibold">ISEEM</p>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <!-- SLIDE 2 : INTRODUCTION & ÉTUDE DE CAS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    <i class="fa-sharp fa-solid fa-magnifying-glass mr-3"></i>
+                    Introduction : Étude de cas
+                </h2>
+
+                <div class="bg-emerald-50 p-8 rounded-2xl shadow-md">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-school text-emerald-600"></i>
+                        Cas d'une école
+                    </h3>
+
+                    <p class="text-lg leading-relaxed mb-4">
+                        Une école gère les informations suivantes à l'aide de fichiers séparés :
+                    </p>
+
+                    <ul class="space-y-3 text-lg">
+                        <li class="flex items-center gap-3">
+                            <i class="fa-regular fa-file-lines text-emerald-600"></i>
+                            📁 Fichier des étudiants
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-regular fa-file-lines text-emerald-600"></i>
+                            📁 Fichier des enseignants
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-regular fa-file-lines text-emerald-600"></i>
+                            📁 Fichier des notes
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-regular fa-file-lines text-emerald-600"></i>
+                            📁 Fichier des absences
+                        </li>
+                    </ul>
+
+                    <p class="mt-6 text-lg leading-relaxed">
+                        Chaque service stocke ses données indépendamment.
+                    </p>
+                </div>
+
+                <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-xl">
+                    <p class="text-xl font-semibold text-yellow-700">
+                        <i class="fa-sharp fa-regular fa-circle-question mr-2"></i>
+                        ❓ Problématique : Cette méthode est-elle efficace et fiable ?
+                    </p>
+                </div>
+            </div>
+
+            <!-- SLIDE 3 : INCONVÉNIENTS DU SYSTÈME DE FICHIERS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-red-600 mb-10">
+                    <i class="fa-sharp fa-solid fa-circle-exclamation mr-3"></i>
+                    Inconvénients du système de fichiers
+                </h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-red-50 p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <i class="fa-sharp fa-solid fa-1-circle text-red-600"></i>
+                            1️⃣ Redondance
+                        </h3>
+                        <p class="text-lg">
+                            Les mêmes données sont enregistrées plusieurs fois.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <i class="fa-sharp fa-solid fa-2-circle text-red-600"></i>
+                            2️⃣ Incohérence
+                        </h3>
+                        <p class="text-lg">
+                            Une modification dans un fichier ne se reflète pas ailleurs.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <i class="fa-sharp fa-solid fa-3-circle text-red-600"></i>
+                            3️⃣ Difficulté d'accès
+                        </h3>
+                        <p class="text-lg">
+                            Recherche lente et gestion complexe.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <i class="fa-sharp fa-solid fa-4-circle text-red-600"></i>
+                            4️⃣ Sécurité limitée
+                        </h3>
+                        <p class="text-lg">
+                            Risque de perte, suppression ou modification non contrôlée.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-emerald-50 border-l-4 border-emerald-600 p-6 rounded-xl">
+                    <p class="text-xl font-semibold text-emerald-800">
+                        <i class="fa-sharp fa-regular fa-arrow-right mr-2"></i>
+                        👉 Il faut donc une solution centralisée : la Base de Données.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SLIDE 4 : DÉFINITION D'UNE BASE DE DONNÉES -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    <i class="fa-sharp fa-solid fa-circle-info mr-3"></i>
+                    Définition d'une Base de Données
+                </h2>
+
+                <div class="bg-emerald-50 p-8 rounded-2xl shadow-md text-lg leading-relaxed">
+                    <p>
+                        Une <strong class="text-emerald-700">Base de Données</strong> est un ensemble organisé de données
+                        stockées de manière structurée et cohérente,
+                        permettant un accès rapide, sécurisé et efficace.
+                    </p>
+
+                    <div class="mt-8 grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl">
+                            <i class="fa-sharp fa-solid fa-database text-3xl text-emerald-600 mb-2"></i>
+                            <h4 class="font-bold">Données structurées</h4>
+                            <p class="text-sm">Organisées en tables, lignes et colonnes</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl">
+                            <i class="fa-sharp fa-solid fa-bolt text-3xl text-emerald-600 mb-2"></i>
+                            <h4 class="font-bold">Accès rapide</h4>
+                            <p class="text-sm">Recherches optimisées avec des index</p>
+                        </div>
+                    </div>
+
+                    <p class="mt-6">
+                        Elle est gérée par un logiciel appelé
+                        <strong class="text-emerald-700">Système de Gestion de Base de Données (SGBD)</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SLIDE 5 : POURQUOI STRUCTURER LES DONNÉES -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-10">
+                    <i class="fa-sharp fa-solid fa-list-check mr-3"></i>
+                    Pourquoi structurer les données ?
+                </h2>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-circle-check text-2xl text-blue-600"></i>
+                        <span class="text-lg">Éviter la redondance</span>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-circle-check text-2xl text-blue-600"></i>
+                        <span class="text-lg">Garantir la cohérence</span>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-circle-check text-2xl text-blue-600"></i>
+                        <span class="text-lg">Améliorer la sécurité</span>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-circle-check text-2xl text-blue-600"></i>
+                        <span class="text-lg">Faciliter la recherche</span>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-circle-check text-2xl text-blue-600"></i>
+                        <span class="text-lg">Optimiser la performance</span>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl flex items-center gap-3">
+                        <i class="fa-sharp fa-solid fa-circle-check text-2xl text-blue-600"></i>
+                        <span class="text-lg">Permettre le partage multi-utilisateur</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-emerald-100 rounded-lg">
+                    <p class="font-bold text-emerald-800">📌 En résumé :</p>
+                    <p>Une base de données = une seule source de vérité, accessible et fiable !</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 6 : SCHÉMA GÉNÉRAL DE CONCEPTION -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 text-center">
+                    <i class="fa-sharp fa-solid fa-sitemap mr-3"></i>
+                    Schéma Général de Conception
+                </h2>
+
+                <div class="flex flex-col items-center space-y-4 text-lg max-w-2xl mx-auto">
+                    <!-- Étape 1 -->
+                    <div class="bg-gray-100 px-6 py-4 rounded-2xl shadow-md text-center w-full">
+                        <strong class="text-xl">1️⃣ Analyse des besoins</strong>
+                        <p class="mt-2 text-gray-600">Comprendre les exigences du système</p>
+                    </div>
+
+                    <i class="fa-solid fa-arrow-down text-2xl text-emerald-600"></i>
+
+                    <!-- Étape 2 -->
+                    <div class="bg-emerald-100 px-6 py-4 rounded-2xl shadow-md text-center w-full border-2 border-emerald-600">
+                        <strong class="text-xl text-emerald-800">2️⃣ Conception avec MERISE</strong>
+                        <p class="mt-2 text-emerald-700 font-semibold">MCD → MLD → MPD</p>
+                    </div>
+
+                    <i class="fa-solid fa-arrow-down text-2xl text-emerald-600"></i>
+
+                    <!-- Étape 3 -->
+                    <div class="bg-blue-100 px-6 py-4 rounded-2xl shadow-md text-center w-full">
+                        <strong class="text-xl">3️⃣ Implémentation en SQL</strong>
+                        <p class="mt-2 text-gray-600">Création des tables et relations</p>
+                    </div>
+
+                    <i class="fa-solid fa-arrow-down text-2xl text-emerald-600"></i>
+
+                    <!-- Étape 4 -->
+                    <div class="bg-purple-100 px-6 py-4 rounded-2xl shadow-md text-center w-full">
+                        <strong class="text-xl">4️⃣ Gestion par un SGBD</strong>
+                        <p class="mt-2 text-gray-600">MySQL, Oracle, PostgreSQL...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 2 : ANALYSE DES BESOINS ==================== -->
+
+            <!-- SLIDE 7 : ANALYSE DES BESOINS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+                    Analyse des Besoins
+                </h2>
+
+                <div class="bg-emerald-50 p-8 rounded-2xl shadow-md text-lg leading-relaxed">
+                    <p>
+                        L'<strong>analyse des besoins</strong> est la première étape de la conception d'une base de données.
+                    </p>
+
+                    <p class="mt-6">
+                        Elle permet de comprendre les attentes des utilisateurs.
+                    </p>
+
+                    <div class="mt-6 grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl">
+                            <h4 class="font-bold text-blue-600">Besoins fonctionnels</h4>
+                            <p class="text-sm mt-2">Ce que le système doit faire</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl">
+                            <h4 class="font-bold text-purple-600">Besoins non fonctionnels</h4>
+                            <p class="text-sm mt-2">Comment le système doit fonctionner</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 8 : BESOINS FONCTIONNELS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-gears"></i>
+                    Besoins Fonctionnels
+                </h2>
+
+                <div class="bg-blue-50 p-8 rounded-2xl shadow-md text-lg leading-relaxed">
+                    <p>
+                        Les <strong>besoins fonctionnels</strong> décrivent <strong>les services et les actions</strong>
+                        que le système doit réaliser.
+                    </p>
+
+                    <p class="mt-6">
+                        Ils répondent à la question :
+                        <strong class="bg-white px-4 py-2 rounded-lg block mt-2 text-center">"Que doit faire le système ?"</strong>
+                    </p>
+
+                    <div class="mt-6 bg-white p-4 rounded-lg">
+                        <h4 class="font-bold mb-2">📝 Exemples :</h4>
+                        <ul class="space-y-2">
+                            <li><i class="fa-regular fa-circle-check text-green-600 mr-2"></i> Ajouter un étudiant</li>
+                            <li><i class="fa-regular fa-circle-check text-green-600 mr-2"></i> Modifier une note</li>
+                            <li><i class="fa-regular fa-circle-check text-green-600 mr-2"></i> Supprimer un enseignant</li>
+                            <li><i class="fa-regular fa-circle-check text-green-600 mr-2"></i> Rechercher un étudiant</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 9 : BESOINS NON FONCTIONNELS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-shield-halved"></i>
+                    Besoins Non Fonctionnels
+                </h2>
+
+                <div class="bg-purple-50 p-8 rounded-2xl shadow-md text-lg leading-relaxed">
+                    <p>
+                        Les <strong>besoins non fonctionnels</strong> décrivent
+                        <strong>la qualité et les contraintes</strong> du système.
+                    </p>
+
+                    <p class="mt-6">
+                        Ils répondent à la question :
+                        <strong class="bg-white px-4 py-2 rounded-lg block mt-2 text-center">"Comment le système doit fonctionner ?"</strong>
+                    </p>
+
+                    <div class="mt-6 bg-white p-4 rounded-lg">
+                        <h4 class="font-bold mb-2">📝 Exemples :</h4>
+                        <ul class="space-y-2">
+                            <li><i class="fa-regular fa-circle-check text-purple-600 mr-2"></i> Sécurisé</li>
+                            <li><i class="fa-regular fa-circle-check text-purple-600 mr-2"></i> Rapide (performance élevée)</li>
+                            <li><i class="fa-regular fa-circle-check text-purple-600 mr-2"></i> Disponible 24h/24</li>
+                            <li><i class="fa-regular fa-circle-check text-purple-600 mr-2"></i> Facile à utiliser</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 3 : INTRODUCTION À MERISE ==================== -->
+
+            <!-- SLIDE 10 : INTRODUCTION À MERISE -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-diagram-project"></i>
+                    Introduction à MERISE
+                </h2>
+
+                <div class="bg-emerald-50 p-8 rounded-2xl shadow-md text-lg leading-relaxed">
+                    <p class="mb-4">
+                        <strong>MERISE</strong> est une méthode de conception de systèmes d'information
+                        développée en France dans les années 1970.
+                    </p>
+
+                    <p class="mb-4">
+                        Elle permet de modéliser les données de manière structurée avant de les implémenter dans une base de données.
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-4 mt-6">
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <span class="text-2xl font-bold text-emerald-600 block">1</span>
+                            <p class="font-semibold">Niveau Conceptuel</p>
+                            <p class="text-sm text-gray-600">(MCD)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <span class="text-2xl font-bold text-emerald-600 block">2</span>
+                            <p class="font-semibold">Niveau Logique</p>
+                            <p class="text-sm text-gray-600">(MLD)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <span class="text-2xl font-bold text-emerald-600 block">3</span>
+                            <p class="font-semibold">Niveau Physique</p>
+                            <p class="text-sm text-gray-600">(MPD)</p>
+                        </div>
+                    </div>
+
+                   
+                </div>
+            </div>
+
+            <!-- SLIDE 11 : QU'EST-CE QUE LE MCD ? -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-brain"></i>
+                    Qu'est-ce que le MCD ?
+                </h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-bold text-blue-700 mb-3">📌 Définition</h3>
+                        <p class="text-lg">
+                            Le <strong>Modèle Conceptuel de Données (MCD)</strong> représente
+                            la structure des données indépendamment de toute technologie.
+                        </p>
+                        <p class="mt-4 font-semibold">Il décrit :</p>
+                        <ul class="mt-2 space-y-2">
+                            <li class="flex items-center gap-2">
+                                <i class="fa-regular fa-circle-check text-blue-600"></i>
+                                Les entités (objets du monde réel)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-regular fa-circle-check text-blue-600"></i>
+                                Les propriétés (attributs)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-regular fa-circle-check text-blue-600"></i>
+                                Les associations (relations)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-emerald-50 p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-bold text-emerald-700 mb-3">🎯 Objectifs</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-sharp fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                <span>Comprendre et formaliser les besoins</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-sharp fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                <span>Créer un langage commun entre analystes et utilisateurs</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-sharp fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                <span>Faciliter la maintenance et l'évolution</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-500">
+                    <p class="text-lg">
+                        <i class="fa-sharp fa-regular fa-lightbulb text-yellow-600 mr-2"></i>
+                        <strong>À retenir :</strong> Le MCD répond à la question 
+                        <span class="bg-white px-3 py-1 rounded font-bold">"QUELLES données stocke-t-on ?"</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 4 : LES ENTITÉS ==================== -->
+
+            <!-- SLIDE 12 : LES ENTITÉS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-cube"></i>
+                    Les Entités
+                </h2>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-lg mb-4">
+                            Une <strong>entité</strong> représente un objet ou un concept du monde réel
+                            que l'on souhaite stocker dans la base de données.
+                        </p>
+
+                        <div class="bg-gray-50 p-4 rounded-xl">
+                            <h3 class="font-bold mb-2">📋 Règles de nommage :</h3>
+                            <ul class="space-y-1">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-600"></i>
+                                    Nom au singulier
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-600"></i>
+                                    En majuscules
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-600"></i>
+                                    Pas d'espaces ni de caractères spéciaux
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="font-bold mb-2">📝 Exemples :</h3>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-blue-100 p-2 rounded text-center font-bold">ÉTUDIANT</div>
+                                <div class="bg-blue-100 p-2 rounded text-center font-bold">ENSEIGNANT</div>
+                                <div class="bg-blue-100 p-2 rounded text-center font-bold">COURS</div>
+                                <div class="bg-blue-100 p-2 rounded text-center font-bold">NOTE</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">🎨 Représentation graphique :</h3>
+                        <div class="bg-white p-4 rounded-lg shadow text-center">
+                            <div class="mcd-entity">
+                                <h3>ÉTUDIANT</h3>
+                            </div>
+                            <p class="mt-2 text-sm">Une entité se représente par un rectangle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 13 : LES ATTRIBUTS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-list"></i>
+                    Les Attributs
+                </h2>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-lg mb-4">
+                            Les <strong>attributs</strong> sont les propriétés qui décrivent une entité.
+                        </p>
+
+                        <div class="bg-gray-50 p-4 rounded-xl mb-4">
+                            <h3 class="font-bold mb-2">Exemple pour ÉTUDIANT :</h3>
+                            <ul class="space-y-2">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-500"></i>
+                                    <u>num_etudiant</u> (identifiant)
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-500"></i>
+                                    nom_etudiant
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-500"></i>
+                                    prenom_etudiant
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-500"></i>
+                                    date_naissance
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-regular fa-circle-check text-green-500"></i>
+                                    email
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-yellow-50 p-3 rounded">
+                            <p class="text-sm">
+                                <span class="font-bold">🔑 Identifiant :</span> Attribut qui permet
+                                d'identifier de façon unique chaque occurrence d'une entité.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">🎨 Représentation graphique :</h3>
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <div class="mcd-entity w-full">
+                                <h3>ÉTUDIANT</h3>
+                                <hr class="my-2 border-emerald-600">
+                                <ul>
+                                    <li><u>num_etudiant</u> (identifiant)</li>
+                                    <li>nom_etudiant</li>
+                                    <li>prenom_etudiant</li>
+                                    <li>date_naissance</li>
+                                    <li>email</li>
+                                </ul>
+                            </div>
+                            <p class="mt-2 text-sm text-center">Les attributs sont listés dans l'entité</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 14 : EXEMPLE COMPLET D'ENTITÉ -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    Exemple : Entité ÉTUDIANT
+                </h2>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">📊 Sous forme de tableau :</h3>
+                        <table class="property-table w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Attribut</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><u>num_etudiant</u></td>
+                                    <td>Nombre</td>
+                                    <td>Identifiant unique</td>
+                                </tr>
+                                <tr>
+                                    <td>nom_etudiant</td>
+                                    <td>Texte</td>
+                                    <td>Nom de famille</td>
+                                </tr>
+                                <tr>
+                                    <td>prenom_etudiant</td>
+                                    <td>Texte</td>
+                                    <td>Prénom</td>
+                                </tr>
+                                <tr>
+                                    <td>date_naissance</td>
+                                    <td>Date</td>
+                                    <td>Date de naissance</td>
+                                </tr>
+                                <tr>
+                                    <td>email</td>
+                                    <td>Texte</td>
+                                    <td>Adresse email</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">📝 Exemples de données :</h3>
+                        <table class="property-table w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>num</th>
+                                    <th>nom</th>
+                                    <th>prénom</th>
+                                    <th>date_naissance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Dupont</td>
+                                    <td>Jean</td>
+                                    <td>15/03/2000</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Martin</td>
+                                    <td>Marie</td>
+                                    <td>22/07/2001</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Bernard</td>
+                                    <td>Pierre</td>
+                                    <td>10/11/2000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-emerald-100 p-4 rounded-lg">
+                    <p class="font-bold">💡 Remarque :</p>
+                    <p>L'identifiant (clé primaire) est souligné et permet de distinguer chaque étudiant de façon unique.</p>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 5 : LES ASSOCIATIONS ==================== -->
+
+            <!-- SLIDE 15 : LES ASSOCIATIONS -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-link"></i>
+                    Les Associations
+                </h2>
+
+                <p class="text-lg mb-6">
+                    Une <strong>association</strong> représente un lien entre deux ou plusieurs entités.
+                </p>
+
+                <div class="grid grid-cols-3 gap-6 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-xl text-center">
+                        <h3 class="font-bold text-xl mb-2">1..1</h3>
+                        <p class="text-sm">Un à un</p>
+                        <p class="text-xs mt-2 text-gray-600">Ex: 1 étudiant a 1 dossier</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-xl text-center">
+                        <h3 class="font-bold text-xl mb-2">1..N</h3>
+                        <p class="text-sm">Un à plusieurs</p>
+                        <p class="text-xs mt-2 text-gray-600">Ex: 1 classe a plusieurs étudiants</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-xl text-center">
+                        <h3 class="font-bold text-xl mb-2">N..N</h3>
+                        <p class="text-sm">Plusieurs à plusieurs</p>
+                        <p class="text-xs mt-2 text-gray-600">Ex: des étudiants suivent plusieurs cours</p>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-50 p-4 rounded-lg">
+                    <h4 class="font-bold mb-2">📌 Cardinalités :</h4>
+                    <p>Les cardinalités indiquent le nombre de fois qu'une entité participe à une association.</p>
+                    <p class="mt-2">Exemple : (1,1) = participe exactement 1 fois | (0,N) = peut participer 0, 1 ou plusieurs fois</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 16 : EXEMPLE D'ASSOCIATION 1..N -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    Exemple : Association (1,N)
+                </h2>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">🏫 CLASSE → ÉTUDIANT</h3>
+                        <p class="mb-4">Une classe contient plusieurs étudiants</p>
+                        
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="mcd-entity">
+                                <h3>CLASSE</h3>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="cardinality">(1,1)</span>
+                                <i class="fa-solid fa-arrow-right text-2xl text-emerald-600 my-2"></i>
+                                <i class="fa-solid fa-arrow-left text-2xl text-emerald-600 my-2 rotate-180"></i>
+                                <span class="cardinality">(0,N)</span>
+                            </div>
+                            <div class="mcd-entity">
+                                <h3>ÉTUDIANT</h3>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <span class="bg-yellow-200 px-3 py-1 rounded-full text-sm font-bold">1,N</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">📊 Traduction :</h3>
+                        <ul class="space-y-3 text-lg">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-regular fa-circle-check text-green-600 mt-1"></i>
+                                Une <strong>classe</strong> peut avoir <strong>plusieurs étudiants</strong>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-regular fa-circle-check text-green-600 mt-1"></i>
+                                Un <strong>étudiant</strong> appartient à <strong>une seule classe</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 17 : EXEMPLE D'ASSOCIATION N..N -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    Exemple : Association (N,N)
+                </h2>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">📚 ÉTUDIANT ↔ COURS</h3>
+                        <p class="mb-4">Un étudiant suit plusieurs cours</p>
+                        <p class="mb-4">Un cours est suivi par plusieurs étudiants</p>
+                        
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="mcd-entity">
+                                <h3>ÉTUDIANT</h3>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="cardinality">(0,N)</span>
+                                <i class="fa-solid fa-left-right text-2xl text-purple-600 my-2"></i>
+                                <span class="cardinality">(0,N)</span>
+                            </div>
+                            <div class="mcd-entity">
+                                <h3>COURS</h3>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <span class="bg-yellow-200 px-3 py-1 rounded-full text-sm font-bold">N,N</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">📝 Traduction :</h3>
+                        <ul class="space-y-3 text-lg">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-regular fa-circle-check text-green-600 mt-1"></i>
+                                Un <strong>étudiant</strong> suit <strong>plusieurs cours</strong>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-regular fa-circle-check text-green-600 mt-1"></i>
+                                Un <strong>cours</strong> est suivi par <strong>plusieurs étudiants</strong>
+                            </li>
+                        </ul>
+
+                        <div class="mt-6 bg-yellow-50 p-3 rounded">
+                            <p class="text-sm">
+                                <i class="fa-regular fa-lightbulb text-yellow-600 mr-1"></i>
+                                <strong>Attention :</strong> Une association N,N deviendra une table à part dans le MLD.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 6 : EXERCICES PRATIQUES ==================== -->
+
+            <!-- SLIDE 18 : EXERCICE PRATIQUE 1 - BIBLIOTHÈQUE -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-pencil"></i>
+                    Exercice pratique n°1
+                </h2>
+
+                <div class="bg-emerald-50 p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">📌 Énoncé : Bibliothèque</h3>
+                    
+                    <p class="text-lg mb-6">
+                        Une bibliothèque souhaite gérer :
+                    </p>
+
+                    <ul class="space-y-3 text-lg mb-6">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-regular fa-book text-emerald-600 mt-1"></i>
+                            Les <strong>livres</strong> (titre, auteur, ISBN, année)
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-regular fa-user text-emerald-600 mt-1"></i>
+                            Les <strong>membres</strong> (nom, prénom, adresse, téléphone)
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-regular fa-calendar text-emerald-600 mt-1"></i>
+                            Les <strong>emprunts</strong> (date d'emprunt, date de retour)
+                        </li>
+                    </ul>
+
+                    <div class="bg-white p-6 rounded-xl">
+                        <p class="font-bold mb-3 text-lg">✏️ Questions :</p>
+                        <ol class="space-y-2 list-decimal pl-5">
+                            <li>Identifiez les entités</li>
+                            <li>Listez les attributs de chaque entité</li>
+                            <li>Quel est l'identifiant de chaque entité ?</li>
+                            <li>Quelles sont les associations entre ces entités ?</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 19 : CORRECTION EXERCICE 1 -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    Correction : Bibliothèque
+                </h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                            <i class="fa-regular fa-book text-green-600"></i>
+                            LIVRE
+                        </h3>
+                        <ul class="space-y-1">
+                            <li><u>isbn</u> (identifiant)</li>
+                            <li>titre</li>
+                            <li>auteur</li>
+                            <li>annee_publication</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                            <i class="fa-regular fa-user text-blue-600"></i>
+                            MEMBRE
+                        </h3>
+                        <ul class="space-y-1">
+                            <li><u>num_membre</u> (identifiant)</li>
+                            <li>nom</li>
+                            <li>prenom</li>
+                            <li>adresse</li>
+                            <li>telephone</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-purple-50 p-6 rounded-xl">
+                    <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-purple-600"></i>
+                        Association EMPRUNTER
+                    </h3>
+                    <p class="mb-2">Un <strong>membre</strong> peut emprunter <strong>plusieurs livres</strong></p>
+                    <p class="mb-2">Un <strong>livre</strong> peut être emprunté par <strong>plusieurs membres</strong> (à des moments différents)</p>
+                    <p class="mt-3 font-bold">→ Association (N,N) avec attributs : date_emprunt, date_retour</p>
+                </div>
+
+                <div class="mt-4 flex items-center gap-2 text-green-600">
+                    <i class="fa-regular fa-circle-check"></i>
+                    <span class="font-bold">Représentation MCD à faire par l'étudiant</span>
+                </div>
+            </div>
+
+         
+            <!-- SLIDE 20 : EXERCICE PRATIQUE 3 - HOPITAL -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+                    <i class="fa-sharp fa-solid fa-pencil"></i>
+                    Exercice pratique n°2
+                </h2>
+
+                <div class="bg-emerald-50 p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">🏥 Énoncé : Hôpital</h3>
+                    
+                    <p class="text-lg mb-4">
+                        Un hôpital souhaite gérer :
+                    </p>
+
+                    <ul class="space-y-2 mb-6">
+                        <li><strong>Patients</strong> : num_patient, nom, prenom, date_naissance, adresse</li>
+                        <li><strong>Médecins</strong> : num_medecin, nom, prenom, spécialité</li>
+                        <li><strong>Consultations</strong> : date_consultation, diagnostic</li>
+                        <li><strong>Salles</strong> : num_salle, capacité, service</li>
+                    </ul>
+
+                    <p class="font-semibold mb-3">Règles de gestion :</p>
+                    <ul class="space-y-1 list-disc pl-5 mb-6">
+                        <li>Un patient peut avoir plusieurs consultations</li>
+                        <li>Un médecin peut effectuer plusieurs consultations</li>
+                        <li>Une consultation a lieu dans une salle</li>
+                        <li>Une salle peut accueillir plusieurs consultations</li>
+                    </ul>
+
+                    <div class="bg-white p-4 rounded-lg">
+                        <p class="font-bold">Travail à faire :</p>
+                        <p>Créez le MCD complet avec toutes les entités et associations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 21 : RÉSUMÉ MCD -->
+            <div class="slide">
+                <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+                    📋 Résumé : Ce qu'il faut retenir
+                </h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl mb-3">📌 Entité</h3>
+                        <ul class="space-y-2">
+                            <li>• Représente un objet du monde réel</li>
+                            <li>• Nom au singulier, en majuscules</li>
+                            <li>• Contient des attributs</li>
+                            <li>• A un identifiant unique (clé)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl mb-3">📌 Attribut</h3>
+                        <ul class="space-y-2">
+                            <li>• Propriété d'une entité</li>
+                            <li>• L'identifiant est souligné</li>
+                            <li>• A un type (texte, nombre, date)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-purple-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl mb-3">📌 Association</h3>
+                        <ul class="space-y-2">
+                            <li>• Lien entre entités</li>
+                            <li>• A des cardinalités (1,1 ou 0,N)</li>
+                            <li>• Peut porter des attributs</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl mb-3">📌 Cardinalités</h3>
+                        <ul class="space-y-2">
+                            <li>• (1,1) : participe exactement 1 fois</li>
+                            <li>• (0,1) : participe 0 ou 1 fois</li>
+                            <li>• (0,N) : participe 0,1 ou plusieurs fois</li>
+                            <li>• (1,N) : participe au moins 1 fois</li>
+                        </ul>
+                    </div>
+                </div>
+
+               
+            </div>
+<!-- ==================== SECTION 7 : INTRODUCTION AU MLD ==================== -->
+
+<!-- SLIDE 22 : INTRODUCTION AU MLD -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-arrow-right-to-bracket"></i>
+        Introduction au MLD
+    </h2>
+
+    <div class="bg-emerald-50 p-8 rounded-2xl shadow-md text-lg leading-relaxed">
+        <p class="mb-4">
+            Le <strong class="text-emerald-700">Modèle Logique de Données (MLD)</strong> est la transformation du MCD 
+            en un modèle compréhensible par un SGBD (Système de Gestion de Base de Données).
+        </p>
+
+        <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="bg-white p-4 rounded-xl text-center border-2 border-blue-300">
+                <span class="text-2xl font-bold text-blue-600 block">MCD</span>
+                <p class="text-sm mt-1">Concepts</p>
+                <p class="text-xs text-gray-500">Entités, associations</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl text-center border-2 border-emerald-600 shadow-lg">
+                <span class="text-2xl font-bold text-emerald-600 block">→ MLD ←</span>
+                <p class="text-sm mt-1">Logique</p>
+                <p class="text-xs text-gray-500">Tables, clés, relations</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl text-center border-2 border-purple-300">
+                <span class="text-2xl font-bold text-purple-600 block">MPD</span>
+                <p class="text-sm mt-1">Physique</p>
+                <p class="text-xs text-gray-500">SQL, types précis</p>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-yellow-50 p-4 rounded-lg">
+            <p class="font-bold">📌 À retenir :</p>
+            <p>Le MLD est indépendant du SGBD mais dépend du modèle relationnel. C'est une étape de <strong>traduction</strong> du MCD.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 23 : OBJECTIFS DU MLD -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-bullseye"></i>
+        Objectifs du MLD
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div class="bg-blue-50 p-6 rounded-2xl">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center">1</span>
+                Traduire le MCD
+            </h3>
+            <p>Transformer les entités et associations en tables et relations compréhensibles par un SGBD.</p>
+        </div>
+
+        <div class="bg-green-50 p-6 rounded-2xl">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center">2</span>
+                Optimiser la structure
+            </h3>
+            <p>Éliminer les redondances et préparer un schéma efficace pour l'implémentation.</p>
+        </div>
+
+        <div class="bg-purple-50 p-6 rounded-2xl">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center">3</span>
+                Définir les clés
+            </h3>
+            <p>Identifier les clés primaires (PK) et les clés étrangères (FK) pour assurer l'intégrité des données.</p>
+        </div>
+
+        <div class="bg-orange-50 p-6 rounded-2xl">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span class="bg-orange-600 text-white w-8 h-8 rounded-full flex items-center justify-center">4</span>
+                Préparer le SQL
+            </h3>
+            <p>Obtenir un schéma directement utilisable pour écrire les instructions CREATE TABLE.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 24 : RÈGLES DE PASSAGE MCD → MLD - PARTIE 1 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Règles de passage MCD → MLD (1/2)
+    </h2>
+
+    <div class="space-y-6">
+        <!-- Règle 1 -->
+        <div class="bg-blue-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center">1</span>
+                Règle des entités
+            </h3>
+            <p class="text-lg">Chaque <strong>entité</strong> du MCD devient une <strong>table</strong> dans le MLD.</p>
+            <div class="mt-3 grid grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded">
+                    <p class="font-bold text-center">MCD</p>
+                    <p class="text-center text-emerald-600">ÉTUDIANT</p>
+                </div>
+                <div class="bg-white p-3 rounded">
+                    <p class="font-bold text-center">MLD</p>
+                    <p class="text-center text-emerald-600">Table ÉTUDIANT</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Règle 2 -->
+        <div class="bg-green-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <span class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center">2</span>
+                Règle des attributs
+            </h3>
+            <p class="text-lg">Les <strong>attributs</strong> deviennent des <strong>colonnes</strong> dans la table.</p>
+            <div class="mt-3 grid grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded">
+                    <p class="font-bold text-center">MCD</p>
+                    <ul class="text-sm">
+                        <li><u>num_etudiant</u></li>
+                        <li>nom</li>
+                        <li>prenom</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-3 rounded">
+                    <p class="font-bold text-center">MLD</p>
+                    <p class="text-sm">num_etudiant (PK)</p>
+                    <p class="text-sm">nom</p>
+                    <p class="text-sm">prenom</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Règle 3 -->
+        <div class="bg-purple-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center">3</span>
+                Règle des identifiants
+            </h3>
+            <p class="text-lg">L'<strong>identifiant</strong> devient la <strong>clé primaire (Primary Key - PK)</strong>.</p>
+            <div class="mt-3 bg-yellow-50 p-3 rounded">
+                <p class="font-mono">PRIMARY KEY (num_etudiant)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 25 : RÈGLES DE PASSAGE MCD → MLD - PARTIE 2 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Règles de passage MCD → MLD (2/2)
+    </h2>
+
+    <div class="space-y-6">
+        <!-- Règle 4 : Association (1,N) -->
+        <div class="bg-emerald-50 p-6 rounded-xl border-l-8 border-emerald-600">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <span class="bg-emerald-600 text-white w-8 h-8 rounded-full flex items-center justify-center">4</span>
+                Association (1,N)
+            </h3>
+            <p class="text-lg">On ajoute la <strong>clé primaire</strong> de l'entité côté "1" comme <strong>clé étrangère</strong> dans la table côté "N".</p>
+            <div class="mt-4 bg-white p-4 rounded-lg">
+                <p class="font-bold">Exemple : CLASSE (1) → ÉTUDIANT (N)</p>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <p class="font-mono text-sm">Table CLASSE</p>
+                        <p class="font-mono text-xs">num_classe (PK)</p>
+                        <p class="font-mono text-xs">nom_classe</p>
+                    </div>
+                    <div>
+                        <p class="font-mono text-sm">Table ÉTUDIANT</p>
+                        <p class="font-mono text-xs">num_etudiant (PK)</p>
+                        <p class="font-mono text-xs">nom</p>
+                        <p class="font-mono text-xs">prenom</p>
+                        <p class="font-mono text-xs text-emerald-600 font-bold">num_classe (FK)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Règle 5 : Association (N,N) -->
+        <div class="bg-purple-50 p-6 rounded-xl border-l-8 border-purple-600">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center">5</span>
+                Association (N,N)
+            </h3>
+            <p class="text-lg">On crée une <strong>nouvelle table</strong> (table de liaison) qui contient :</p>
+            <ul class="list-disc pl-8 mt-2">
+                <li>Les clés primaires des deux entités (clés étrangères)</li>
+                <li>Les attributs de l'association (s'il y en a)</li>
+            </ul>
+            <p class="mt-2">La clé primaire de cette table est la combinaison des deux clés.</p>
+            <div class="mt-4 bg-white p-4 rounded-lg">
+                <p class="font-bold">Exemple : ÉTUDIANT (N) ↔ COURS (N)</p>
+                <p class="font-mono text-sm mt-2">Table SUIVRE</p>
+                <p class="font-mono text-xs">num_etudiant (PK, FK)</p>
+                <p class="font-mono text-xs">code_cours (PK, FK)</p>
+                <p class="font-mono text-xs">note</p>
+                <p class="font-mono text-xs">date_inscription</p>
+            </div>
+        </div>
+
+        <!-- Règle 6 : Association (1,1) -->
+        <div class="bg-orange-50 p-6 rounded-xl border-l-8 border-orange-600">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <span class="bg-orange-600 text-white w-8 h-8 rounded-full flex items-center justify-center">6</span>
+                Association (1,1)
+            </h3>
+            <p class="text-lg">On peut fusionner les deux tables ou ajouter une clé étrangère de l'une vers l'autre.</p>
+            <p class="text-sm mt-2 text-gray-600">Cas rare, souvent on choisit de mettre la clé étrangère dans l'une des deux tables.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 26 : EXEMPLE COMPLET 1 - ASSOCIATION (1,N) -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Exemple 1 : Association (1,N)
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <!-- MCD -->
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4 text-center text-blue-600">📊 MCD</h3>
+            <div class="flex items-center justify-center gap-4">
+                <div class="mcd-entity">
+                    <h3>CLASSE</h3>
+                    <ul>
+                        <li><u>num_classe</u></li>
+                        <li>nom_classe</li>
+                        <li>niveau</li>
+                    </ul>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="cardinality">(1,1)</span>
+                    <i class="fa-solid fa-arrow-right text-emerald-600 my-2"></i>
+                    <i class="fa-solid fa-arrow-left text-emerald-600 my-2 rotate-180"></i>
+                    <span class="cardinality">(0,N)</span>
+                </div>
+                <div class="mcd-entity">
+                    <h3>ÉTUDIANT</h3>
+                    <ul>
+                        <li><u>num_etudiant</u></li>
+                        <li>nom</li>
+                        <li>prenom</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MLD -->
+        <div class="bg-emerald-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4 text-center text-emerald-700">📋 MLD</h3>
+            
+            <div class="space-y-4">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <p class="font-bold text-lg">Table CLASSE</p>
+                    <p class="font-mono text-sm">num_classe (PK)</p>
+                    <p class="font-mono text-sm">nom_classe</p>
+                    <p class="font-mono text-sm">niveau</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow border-2 border-emerald-600">
+                    <p class="font-bold text-lg">Table ÉTUDIANT</p>
+                    <p class="font-mono text-sm">num_etudiant (PK)</p>
+                    <p class="font-mono text-sm">nom</p>
+                    <p class="font-mono text-sm">prenom</p>
+                    <p class="font-mono text-sm text-emerald-600 font-bold">num_classe (FK) → CLASSE(num_classe)</p>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-yellow-50 p-3 rounded text-sm">
+                <i class="fa-regular fa-lightbulb text-yellow-600 mr-1"></i>
+                <strong>Explication :</strong> On ajoute num_classe (clé étrangère) dans la table ÉTUDIANT car un étudiant appartient à une seule classe.
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<!-- SLIDE 27 : EXEMPLE COMPLET 2 - ASSOCIATION (N,N) -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Exemple 2 : Association (N,N)
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <!-- MCD -->
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4 text-center text-blue-600">📊 MCD</h3>
+            <div class="flex items-center justify-center gap-4">
+                <div class="mcd-entity">
+                    <h3>ÉTUDIANT</h3>
+                    <ul>
+                        <li><u>num_etudiant</u></li>
+                        <li>nom</li>
+                        <li>prenom</li>
+                    </ul>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="cardinality">(0,N)</span>
+                    <span class="font-bold text-purple-600 my-2">SUIT</span>
+                    <span class="cardinality">(0,N)</span>
+                </div>
+                <div class="mcd-entity">
+                    <h3>COURS</h3>
+                    <ul>
+                        <li><u>code_cours</u></li>
+                        <li>intitule</li>
+                        <li>coefficient</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MLD -->
+        <div class="bg-emerald-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4 text-center text-emerald-700">📋 MLD</h3>
+            
+            <div class="space-y-3">
+                <div class="bg-white p-3 rounded-lg shadow">
+                    <p class="font-bold">Table ÉTUDIANT</p>
+                    <p class="font-mono text-xs">num_etudiant (PK), nom, prenom</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg shadow">
+                    <p class="font-bold">Table COURS</p>
+                    <p class="font-mono text-xs">code_cours (PK), intitule, coefficient</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg shadow border-2 border-purple-600">
+                    <p class="font-bold text-purple-600">Table SUIVRE (table de liaison)</p>
+                    <p class="font-mono text-xs">num_etudiant (PK, FK) → ÉTUDIANT</p>
+                    <p class="font-mono text-xs">code_cours (PK, FK) → COURS</p>
+                    <p class="font-mono text-xs">note</p>
+                    <p class="font-mono text-xs">date_inscription</p>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-yellow-50 p-3 rounded text-sm">
+                <i class="fa-regular fa-lightbulb text-yellow-600 mr-1"></i>
+                <strong>Explication :</strong> On crée une nouvelle table "SUIVRE" qui contient les deux clés étrangères et les attributs de l'association.
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<!-- SLIDE 28 : EXEMPLE COMPLET 3 - CAS COMPLEXE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Exemple 3 : Cas complexe
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <!-- MCD -->
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4 text-center text-blue-600">📊 MCD - COMMANDE</h3>
+            <div class="flex flex-col items-center gap-4">
+                <div class="mcd-entity">
+                    <h3>CLIENT</h3>
+                    <ul>
+                        <li><u>num_client</u></li>
+                        <li>nom</li>
+                        <li>adresse</li>
+                    </ul>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <span class="cardinality">(1,1)</span>
+                    <i class="fa-solid fa-arrow-right text-emerald-600"></i>
+                    <i class="fa-solid fa-arrow-left text-emerald-600"></i>
+                    <span class="cardinality">(0,N)</span>
+                </div>
+
+                <div class="mcd-entity">
+                    <h3>COMMANDE</h3>
+                    <ul>
+                        <li><u>num_commande</u></li>
+                        <li>date_commande</li>
+                        <li>montant</li>
+                    </ul>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <span class="cardinality">(1,1)</span>
+                    <i class="fa-solid fa-arrow-right text-emerald-600"></i>
+                    <i class="fa-solid fa-arrow-left text-emerald-600"></i>
+                    <span class="cardinality">(0,N)</span>
+                </div>
+
+                <div class="mcd-entity">
+                    <h3>PRODUIT</h3>
+                    <ul>
+                        <li><u>ref_produit</u></li>
+                        <li>designation</li>
+                        <li>prix</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MLD -->
+        <div class="bg-emerald-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4 text-center text-emerald-700">📋 MLD</h3>
+            
+            <div class="space-y-3">
+                <div class="bg-white p-3 rounded-lg shadow">
+                    <p class="font-bold">Table CLIENT</p>
+                    <p class="font-mono text-xs">num_client (PK), nom, adresse</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg shadow">
+                    <p class="font-bold">Table PRODUIT</p>
+                    <p class="font-mono text-xs">ref_produit (PK), designation, prix</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg shadow border-2 border-emerald-600">
+                    <p class="font-bold">Table COMMANDE</p>
+                    <p class="font-mono text-xs">num_commande (PK), date_commande, montant</p>
+                    <p class="font-mono text-xs text-emerald-600">num_client (FK) → CLIENT</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-lg shadow border-2 border-purple-600">
+                    <p class="font-bold">Table LIGNE_COMMANDE (table de liaison)</p>
+                    <p class="font-mono text-xs">num_commande (PK, FK) → COMMANDE</p>
+                    <p class="font-mono text-xs">ref_produit (PK, FK) → PRODUIT</p>
+                    <p class="font-mono text-xs">quantite</p>
+                    <p class="font-mono text-xs">prix_unitaire</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- SLIDE 39 : EXERCICE MLD N°2 - HÔPITAL -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-pencil"></i>
+        Exercice MLD n°1 : Hôpital
+    </h2>
+
+    <div class="bg-emerald-50 p-8 rounded-2xl shadow-lg">
+        <h3 class="text-2xl font-bold mb-4">🏥 MCD Hôpital</h3>
+        
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-white p-3 rounded">
+                <p class="font-bold">PATIENT</p>
+                <ul class="text-xs">
+                    <li><u>num_patient</u></li>
+                    <li>nom</li>
+                    <li>prenom</li>
+                    <li>date_naissance</li>
+                </ul>
+            </div>
+            <div class="bg-white p-3 rounded">
+                <p class="font-bold">MEDECIN</p>
+                <ul class="text-xs">
+                    <li><u>num_medecin</u></li>
+                    <li>nom</li>
+                    <li>prenom</li>
+                    <li>specialite</li>
+                </ul>
+            </div>
+            <div class="bg-white p-3 rounded">
+                <p class="font-bold">SALLE</p>
+                <ul class="text-xs">
+                    <li><u>num_salle</u></li>
+                    <li>capacite</li>
+                    <li>service</li>
+                </ul>
+            </div>
+            <div class="bg-white p-3 rounded">
+                <p class="font-bold">CONSULTATION</p>
+                <ul class="text-xs">
+                    <li>date_consultation</li>
+                    <li>diagnostic</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="font-semibold mb-2">Règles de gestion :</p>
+        <ul class="list-disc pl-5 text-sm mb-4">
+            <li>Un patient peut avoir plusieurs consultations (1,N)</li>
+            <li>Un médecin peut effectuer plusieurs consultations (1,N)</li>
+            <li>Une consultation a lieu dans une seule salle (N,1)</li>
+            <li>Une salle peut accueillir plusieurs consultations (1,N)</li>
+        </ul>
+
+        <div class="bg-yellow-100 p-4 rounded-lg">
+            <p class="font-bold">✏️ Questions :</p>
+            <ol class="list-decimal pl-5">
+                <li>Dessinez le MCD</li>
+                <li>Transformez en MLD</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 30 : CORRECTION EXERCICE MLD N°2 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Correction : MLD Hôpital
+    </h2>
+
+    <div class="grid grid-cols-3 gap-3">
+        <div class="bg-blue-50 p-3 rounded">
+            <p class="font-bold text-sm">PATIENT</p>
+            <p class="font-mono text-xs">num_patient (PK)</p>
+            <p class="font-mono text-xs">nom</p>
+            <p class="font-mono text-xs">prenom</p>
+            <p class="font-mono text-xs">date_naissance</p>
+        </div>
+
+        <div class="bg-green-50 p-3 rounded">
+            <p class="font-bold text-sm">MEDECIN</p>
+            <p class="font-mono text-xs">num_medecin (PK)</p>
+            <p class="font-mono text-xs">nom</p>
+            <p class="font-mono text-xs">prenom</p>
+            <p class="font-mono text-xs">specialite</p>
+        </div>
+
+        <div class="bg-orange-50 p-3 rounded">
+            <p class="font-bold text-sm">SALLE</p>
+            <p class="font-mono text-xs">num_salle (PK)</p>
+            <p class="font-mono text-xs">capacite</p>
+            <p class="font-mono text-xs">service</p>
+        </div>
+    </div>
+
+    <div class="mt-4 bg-purple-50 p-4 rounded-lg">
+        <p class="font-bold text-lg">Table CONSULTATION</p>
+        <p class="font-mono text-sm">num_consultation (PK)</p>
+        <p class="font-mono text-sm">date_consultation</p>
+        <p class="font-mono text-sm">diagnostic</p>
+        <p class="font-mono text-sm text-emerald-600">num_patient (FK) → PATIENT</p>
+        <p class="font-mono text-sm text-emerald-600">num_medecin (FK) → MEDECIN</p>
+        <p class="font-mono text-sm text-emerald-600">num_salle (FK) → SALLE</p>
+    </div>
+
+   
+    </div>
+</div>
+
+<!-- SLIDE 31 : RÉCAPITULATIF MCD → MLD -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        📋 Récapitulatif MCD → MLD
+    </h2>
+
+    <div class="grid grid-cols-2 gap-6">
+        <div class="bg-emerald-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4">MCD</h3>
+            <ul class="space-y-2">
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600"></i>
+                    Entités
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600"></i>
+                    Attributs
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600"></i>
+                    Associations
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600"></i>
+                    Cardinalités
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4">MLD</h3>
+            <ul class="space-y-2">
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-arrow-right-long text-blue-600"></i>
+                    Tables
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-arrow-right-long text-blue-600"></i>
+                    Colonnes
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-arrow-right-long text-blue-600"></i>
+                    Clés primaires (PK)
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa-regular fa-arrow-right-long text-blue-600"></i>
+                    Clés étrangères (FK)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-purple-50 p-6 rounded-xl">
+        <h3 class="font-bold text-lg mb-3">🎯 Règles d'or à retenir :</h3>
+        <ul class="space-y-2">
+            <li>• <strong>Entité</strong> → <strong>Table</strong></li>
+            <li>• <strong>Attribut</strong> → <strong>Colonne</strong></li>
+            <li>• <strong>Identifiant</strong> → <strong>Clé primaire (PK)</strong></li>
+            <li>• <strong>Association (1,N)</strong> → <strong>Clé étrangère (FK) du côté N</strong></li>
+            <li>• <strong>Association (N,N)</strong> → <strong>Nouvelle table avec les deux PK comme FK</strong></li>
+            <li>• <strong>Association (1,1)</strong> → <strong>Fusion ou FK dans l'une des tables</strong></li>
+        </ul>
+    </div>
+
+    <div class="mt-4 bg-emerald-600 text-white p-4 rounded-lg text-center text-lg">
+        <i class="fa-regular fa-lightbulb mr-2"></i>
+        Le MLD est la dernière étape avant l'écriture du SQL !
+    </div>
+</div>
+
+<!-- ==================== SECTION 8 : INTRODUCTION AUX SGBD ==================== -->
+
+<!-- SLIDE 32 : QU'EST-CE QU'UN SGBD ? -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-server"></i>
+        Qu'est-ce qu'un SGBD ?
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div class="bg-emerald-50 p-6 rounded-2xl">
+            <h3 class="text-xl font-bold mb-3">📌 Définition</h3>
+            <p class="text-lg">
+                Un <strong>Système de Gestion de Base de Données (SGBD)</strong> est un logiciel qui permet de :
+            </p>
+            <ul class="mt-4 space-y-2">
+                <li class="flex items-start gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600 mt-1"></i>
+                    Créer et structurer une base de données
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600 mt-1"></i>
+                    Manipuler les données (ajout, modification, suppression)
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600 mt-1"></i>
+                    Interroger les données (recherches)
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fa-regular fa-circle-check text-emerald-600 mt-1"></i>
+                    Gérer les accès et la sécurité
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-2xl">
+            <h3 class="text-xl font-bold mb-3">🎯 Exemples de SGBD</h3>
+            <div class="space-y-3">
+                <div class="bg-white p-3 rounded-lg flex items-center gap-3">
+                    <i class="fa-brands fa-mysql text-2xl text-blue-600"></i>
+                    <div>
+                        <p class="font-bold">MySQL</p>
+                        <p class="text-xs">Open source, très répandu</p>
+                    </div>
+                </div>
+                <div class="bg-white p-3 rounded-lg flex items-center gap-3">
+                    <i class="fa-solid fa-database text-2xl text-orange-600"></i>
+                    <div>
+                        <p class="font-bold">Oracle</p>
+                        <p class="text-xs">SGBD professionnel</p>
+                    </div>
+                </div>
+                <div class="bg-white p-3 rounded-lg flex items-center gap-3">
+                    <i class="fa-solid fa-database text-2xl text-blue-800"></i>
+                    <div>
+                        <p class="font-bold">PostgreSQL</p>
+                        <p class="text-xs">Open avancé</p>
+                    </div>
+                </div>
+                <div class="bg-white p-3 rounded-lg flex items-center gap-3">
+                    <i class="fa-solid fa-database text-2xl text-red-600"></i>
+                    <div>
+                        <p class="font-bold">SQL Server</p>
+                        <p class="text-xs">Microsoft</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-yellow-50 p-4 rounded-lg">
+        <p class="font-bold">📌 Dans ce cours, nous utiliserons <span class="text-emerald-700">MySQL</span></p>
+        <p class="text-sm">MySQL est un SGBD relationnel open source, très utilisé dans le développement web.</p>
+    </div>
+</div>
+
+<!-- SLIDE 33 : INTRODUCTION À SQL -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-code"></i>
+        Introduction à SQL
+    </h2>
+
+    <div class="bg-emerald-50 p-8 rounded-2xl shadow-md">
+        <p class="text-lg mb-4">
+            <strong>SQL (Structured Query Language)</strong> est le langage standard pour communiquer avec les bases de données relationnelles.
+        </p>
+
+        <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="bg-white p-4 rounded-xl text-center border-l-8 border-blue-600">
+                <h3 class="font-bold text-xl text-blue-600">LDD</h3>
+                <p class="text-sm">Langage de Définition de Données</p>
+                <p class="text-xs mt-2">CREATE, ALTER, DROP</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl text-center border-l-8 border-green-600">
+                <h3 class="font-bold text-xl text-green-600">LMD</h3>
+                <p class="text-sm">Langage de Manipulation de Données</p>
+                <p class="text-xs mt-2">INSERT, UPDATE, DELETE</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl text-center border-l-8 border-purple-600">
+                <h3 class="font-bold text-xl text-purple-600">LID</h3>
+                <p class="text-sm">Langage d'Interrogation de Données</p>
+                <p class="text-xs mt-2">SELECT</p>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-yellow-50 p-3 rounded">
+            <p class="font-bold">💡 À retenir :</p>
+            <p>SQL permet de créer des tables (LDD), d'y insérer/modifier des données (LMD) et de les interroger (LID).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== SECTION 9 : LDD (LANGAGE DE DÉFINITION DE DONNÉES) ==================== -->
+
+<!-- SLIDE 34 : LDD - CRÉATION DE BASE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-database"></i>
+        LDD : Création d'une base
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div>
+            <h3 class="text-xl font-bold mb-3">📌 CREATE DATABASE</h3>
+            <p class="mb-4">Crée une nouvelle base de données.</p>
+            <pre class="text-sm bg-gray-800 text-white p-4 rounded-lg">
+CREATE DATABASE nom_base;
+
+-- Exemple
+CREATE DATABASE ecole;</pre>
+        </div>
+
+        <div>
+            <h3 class="text-xl font-bold mb-3">📌 USE et DROP</h3>
+            <p class="mb-4">Utiliser et supprimer une base.</p>
+            <pre class="text-sm bg-gray-800 text-white p-4 rounded-lg">
+-- Utiliser une base
+USE ecole;
+
+-- Supprimer une base
+DROP DATABASE ecole;
+
+-- Vérifier les bases
+SHOW DATABASES;</pre>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+        <p class="font-bold">⚠️ Attention :</p>
+        <p>DROP DATABASE supprime définitivement toutes les données. À utiliser avec précaution !</p>
+    </div>
+</div>
+
+<!-- SLIDE 35 : LDD - CRÉATION DE TABLE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-table"></i>
+        LDD : Création de table
+    </h2>
+
+    <div class="bg-emerald-50 p-6 rounded-2xl">
+        <h3 class="text-xl font-bold mb-3">Syntaxe CREATE TABLE</h3>
+        <pre class="text-sm bg-gray-800 text-white p-4 rounded-lg">
+CREATE TABLE nom_table (
+    nom_colonne1 type [contraintes],
+    nom_colonne2 type [contraintes],
+    ...
+);</pre>
+
+        <div class="grid grid-cols-2 gap-6 mt-6">
+            <div>
+                <h4 class="font-bold mb-2">📊 Types de données MySQL :</h4>
+                <table class="property-table text-sm">
+                    <tr><th>Type</th><th>Description</th></tr>
+                    <tr><td>INT</td><td>Nombre entier</td></tr>
+                    <tr><td>VARCHAR(n)</td><td>Chaîne de n caractères max</td></tr>
+                    <tr><td>TEXT</td><td>Texte long</td></tr>
+                    <tr><td>DATE</td><td>Date (YYYY-MM-DD)</td></tr>
+                    <tr><td>DATETIME</td><td>Date et heure</td></tr>
+                    <tr><td>DECIMAL(10,2)</td><td>Nombre décimal</td></tr>
+                    <tr><td>BOOLEAN</td><td>Vrai/Faux (1/0)</td></tr>
+                </table>
+            </div>
+
+            <div>
+                <h4 class="font-bold mb-2">🔑 Contraintes :</h4>
+                <table class="property-table text-sm">
+                    <tr><th>Contrainte</th><th>Description</th></tr>
+                    <tr><td>PRIMARY KEY</td><td>Clé primaire</td></tr>
+                    <tr><td>FOREIGN KEY</td><td>Clé étrangère</td></tr>
+                    <tr><td>NOT NULL</td><td>Ne peut pas être vide</td></tr>
+                    <tr><td>UNIQUE</td><td>Valeurs uniques</td></tr>
+                    <tr><td>AUTO_INCREMENT</td><td>Auto-incrémentation</td></tr>
+                    <tr><td>DEFAULT</td><td>Valeur par défaut</td></tr>
+                    <tr><td>CHECK</td><td>Condition à vérifier</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 36 : LDD - EXEMPLE CRÉATION TABLE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Exemple : Création de tables
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4">Table ÉTUDIANT</h3>
+            <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+CREATE TABLE etudiant (
+    num_etudiant INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    date_naissance DATE,
+    email VARCHAR(100) UNIQUE,
+    num_classe INT,
+    date_inscription DATETIME DEFAULT CURRENT_TIMESTAMP
+);</pre>
+        </div>
+
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-4">Table CLASSE</h3>
+            <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+CREATE TABLE classe (
+    num_classe INT PRIMARY KEY AUTO_INCREMENT,
+    nom_classe VARCHAR(50) NOT NULL UNIQUE,
+    niveau VARCHAR(20),
+    effectif INT DEFAULT 0,
+    CHECK (effectif >= 0)
+);</pre>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+        <p class="font-bold">🔗 Ajout de la clé étrangère :</p>
+        <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg mt-2">
+ALTER TABLE etudiant 
+ADD CONSTRAINT fk_classe 
+FOREIGN KEY (num_classe) 
+REFERENCES classe(num_classe);</pre>
+    </div>
+</div>
+
+<!-- SLIDE 37 : LDD - ALTER TABLE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        LDD : Modifier une table (ALTER)
+    </h2>
+
+    <div class="space-y-4">
+        <div class="bg-emerald-50 p-4 rounded-lg">
+            <h3 class="font-bold">📝 Ajouter une colonne</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg mt-2">
+ALTER TABLE etudiant ADD adresse VARCHAR(255);</pre>
+        </div>
+
+        <div class="bg-emerald-50 p-4 rounded-lg">
+            <h3 class="font-bold">✏️ Modifier une colonne</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg mt-2">
+ALTER TABLE etudiant MODIFY nom VARCHAR(100) NOT NULL;</pre>
+        </div>
+
+        <div class="bg-emerald-50 p-4 rounded-lg">
+            <h3 class="font-bold">🗑️ Supprimer une colonne</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg mt-2">
+ALTER TABLE etudiant DROP COLUMN adresse;</pre>
+        </div>
+
+        <div class="bg-emerald-50 p-4 rounded-lg">
+            <h3 class="font-bold">📌 Renommer une colonne</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg mt-2">
+ALTER TABLE etudiant RENAME COLUMN nom TO nom_famille;</pre>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 38 : LDD - DROP TABLE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        LDD : Supprimer des tables
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div class="bg-red-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3 text-red-600">DROP TABLE</h3>
+            <p>Supprime complètement une table (structure et données).</p>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg mt-3">
+DROP TABLE etudiant;
+
+-- Éviter erreur si table n'existe pas
+DROP TABLE IF EXISTS etudiant;</pre>
+        </div>
+
+        <div class="bg-orange-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3 text-orange-600">TRUNCATE TABLE</h3>
+            <p>Vide la table mais garde la structure.</p>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg mt-3">
+TRUNCATE TABLE etudiant;</pre>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-yellow-50 p-4 rounded-lg">
+        <p class="font-bold">⚠️ Différence importante :</p>
+        <ul class="list-disc pl-5 mt-2">
+            <li><strong>DROP</strong> : supprime la table (elle n'existe plus)</li>
+            <li><strong>TRUNCATE</strong> : vide la table (elle existe toujours, mais sans données)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==================== SECTION 10 : LMD (LANGAGE DE MANIPULATION DE DONNÉES) ==================== -->
+
+<!-- SLIDE 39 : LMD - INSERT -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-plus-circle"></i>
+        LMD : Insérer des données (INSERT)
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div>
+            <h3 class="text-xl font-bold mb-3">📝 Insertion simple</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+-- Spécifier les colonnes
+INSERT INTO classe (nom_classe, niveau) 
+VALUES ('BTS SIO 1', 'BTS');
+
+-- Toutes les colonnes
+INSERT INTO classe 
+VALUES (1, 'BTS SIO 1', 'BTS', 25);</pre>
+        </div>
+
+        <div>
+            <h3 class="text-xl font-bold mb-3">📝 Insertion multiple</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+INSERT INTO etudiant (nom, prenom, email) 
+VALUES 
+    ('Dupont', 'Jean', 'jean@email.com'),
+    ('Martin', 'Marie', 'marie@email.com'),
+    ('Bernard', 'Pierre', 'pierre@email.com');</pre>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+        <p class="font-bold">💡 Astuce :</p>
+        <p>Avec AUTO_INCREMENT, ne pas spécifier la valeur, elle sera automatique.</p>
+    </div>
+</div>
+
+<!-- SLIDE 40 : LMD - SELECT -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+        LMD : Interroger les données (SELECT)
+    </h2>
+
+    <div class="bg-emerald-50 p-6 rounded-2xl">
+        <h3 class="text-xl font-bold mb-3">Syntaxe de base</h3>
+        <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+SELECT colonnes
+FROM table
+[WHERE condition]
+[ORDER BY colonne]
+[LIMIT n];</pre>
+
+        <div class="grid grid-cols-2 gap-6 mt-6">
+            <div>
+                <h4 class="font-bold mb-2">Exemples simples :</h4>
+                <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+-- Toutes les colonnes
+SELECT * FROM etudiant;
+
+-- Colonnes spécifiques
+SELECT nom, prenom FROM etudiant;
+
+-- Avec alias
+SELECT nom AS 'Nom de famille' FROM etudiant;
+
+-- Distinct
+SELECT DISTINCT nom FROM etudiant;</pre>
+            </div>
+
+            <div>
+                <h4 class="font-bold mb-2">Avec conditions :</h4>
+                <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+-- WHERE
+SELECT * FROM etudiant 
+WHERE nom = 'Dupont';
+
+-- Opérateurs
+SELECT * FROM etudiant 
+WHERE age >= 18 AND ville = 'Paris';
+
+-- LIKE
+SELECT * FROM etudiant 
+WHERE email LIKE '%@gmail.com';</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 41 : LMD - UPDATE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-pen-to-square"></i>
+        LMD : Modifier des données (UPDATE)
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div class="bg-blue-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3">Syntaxe</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+UPDATE table
+SET colonne1 = valeur1, colonne2 = valeur2
+WHERE condition;</pre>
+
+            <div class="mt-4 bg-yellow-50 p-3 rounded">
+                <p class="font-bold text-red-600">⚠️ IMPORTANT</p>
+                <p>Toujours mettre un WHERE, sinon TOUTES les lignes seront modifiées !</p>
+            </div>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3">Exemples</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+-- Modifier un étudiant
+UPDATE etudiant 
+SET email = 'nouveau@email.com' 
+WHERE num_etudiant = 1;
+
+-- Modifier plusieurs colonnes
+UPDATE etudiant 
+SET nom = 'DUPONT', prenom = 'JEAN' 
+WHERE num_etudiant = 2;
+
+-- Avec calcul
+UPDATE produit 
+SET prix = prix * 1.10 
+WHERE categorie = 'informatique';</pre>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 42 : LMD - DELETE -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-trash"></i>
+        LMD : Supprimer des données (DELETE)
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div class="bg-red-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3 text-red-600">DELETE</h3>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+DELETE FROM table WHERE condition;
+
+-- Supprimer un étudiant
+DELETE FROM etudiant 
+WHERE num_etudiant = 3;
+
+-- Supprimer plusieurs
+DELETE FROM etudiant 
+WHERE classe = 'BTS 1';
+
+-- Supprimer tout (mais garde structure)
+DELETE FROM etudiant;</pre>
+
+            <div class="mt-4 bg-yellow-50 p-3 rounded">
+                <p class="font-bold text-red-600">⚠️ Attention :</p>
+                <p>DELETE sans WHERE supprime TOUTES les lignes !</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-xl font-bold mb-3">Comparaison</h3>
+            <table class="property-table text-sm">
+                <tr><th>Commande</th><th>Effet</th><th>Rapide?</th></tr>
+                <tr><td>DELETE</td><td>Supprime ligne par ligne</td><td>Lent</td></tr>
+                <tr><td>TRUNCATE</td><td>Vide la table</td><td>Rapide</td></tr>
+                <tr><td>DROP</td><td>Supprime la table</td><td>Rapide</td></tr>
+            </table>
+
+            <div class="mt-4 bg-green-50 p-3 rounded">
+                <p><strong>Pour vider une table :</strong> TRUNCATE est plus rapide que DELETE sans WHERE.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== SECTION 11 : LID AVANCÉ ==================== -->
+
+<!-- SLIDE 43 : SELECT avec JOIN -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Les jointures (JOIN)
+    </h2>
+
+    <div class="bg-emerald-50 p-6 rounded-2xl">
+        <p class="text-lg mb-4">Les jointures permettent d'interroger plusieurs tables à la fois.</p>
+
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-xl font-bold mb-3">INNER JOIN</h3>
+                <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+SELECT e.nom, e.prenom, c.nom_classe
+FROM etudiant e
+INNER JOIN classe c 
+    ON e.num_classe = c.num_classe;</pre>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold mb-3">LEFT JOIN</h3>
+                <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+SELECT e.nom, c.nom_classe
+FROM etudiant e
+LEFT JOIN classe c 
+    ON e.num_classe = c.num_classe;</pre>
+            </div>
+        </div>
+
+        <div class="mt-4 bg-white p-4 rounded">
+            <p class="font-bold">📌 Explication :</p>
+            <ul class="list-disc pl-5">
+                <li><strong>INNER JOIN</strong> : uniquement les correspondances</li>
+                <li><strong>LEFT JOIN</strong> : tous les étudiants, même sans classe</li>
+                <li><strong>RIGHT JOIN</strong> : toutes les classes, même vides</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 44 : Fonctions d'agrégation -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Fonctions d'agrégation
+    </h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <div>
+            <table class="property-table">
+                <tr><th>Fonction</th><th>Description</th></tr>
+                <tr><td>COUNT()</td><td>Nombre de lignes</td></tr>
+                <tr><td>SUM()</td><td>Somme</td></tr>
+                <tr><td>AVG()</td><td>Moyenne</td></tr>
+                <tr><td>MAX()</td><td>Valeur maximale</td></tr>
+                <tr><td>MIN()</td><td>Valeur minimale</td></tr>
+            </table>
+        </div>
+
+        <div>
+            <pre class="text-sm bg-gray-800 text-white p-3 rounded-lg">
+-- Nombre d'étudiants
+SELECT COUNT(*) FROM etudiant;
+
+-- Moyenne des notes par cours
+SELECT code_cours, AVG(note) as moyenne
+FROM suivre
+GROUP BY code_cours;
+
+-- Max et Min
+SELECT MAX(prix), MIN(prix) FROM produit;
+
+-- Avec condition
+SELECT classe, COUNT(*) as effectif
+FROM etudiant
+GROUP BY classe
+HAVING COUNT(*) > 10;</pre>
+        </div>
+    </div>
+
+    <div class="mt-4 bg-yellow-50 p-3 rounded">
+        <p><strong>💡 GROUP BY</strong> : regroupe les lignes | <strong>HAVING</strong> : filtre les groupes (comme WHERE pour GROUP BY)</p>
+    </div>
+</div>
+
+<!-- ==================== SECTION 12 : EXERCICES SQL ==================== -->
+
+<!-- SLIDE 45 : EXERCICE SQL N°1 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-pencil"></i>
+        Exercice SQL n°1 : Création
+    </h2>
+
+    <div class="bg-emerald-50 p-8 rounded-2xl shadow-lg">
+        <h3 class="text-2xl font-bold mb-4">📌 Gestion d'une bibliothèque</h3>
+        
+        <p class="mb-4">Créez les tables suivantes :</p>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-white p-3 rounded">
+                <p class="font-bold">LIVRE</p>
+                <ul class="text-xs">
+                    <li>isbn (PK, VARCHAR(20))</li>
+                    <li>titre (VARCHAR(200), NOT NULL)</li>
+                    <li>auteur (VARCHAR(100))</li>
+                    <li>annee (INT)</li>
+                    <li>disponible (BOOLEAN, default TRUE)</li>
+                </ul>
+            </div>
+            <div class="bg-white p-3 rounded">
+                <p class="font-bold">MEMBRE</p>
+                <ul class="text-xs">
+                    <li>num_membre (PK, INT, AUTO_INCREMENT)</li>
+                    <li>nom (VARCHAR(50), NOT NULL)</li>
+                    <li>prenom (VARCHAR(50))</li>
+                    <li>email (VARCHAR(100), UNIQUE)</li>
+                    <li>date_adhesion (DATE)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-white p-3 rounded mb-4">
+            <p class="font-bold">EMPRUNT</p>
+            <ul class="text-xs">
+                <li>num_emprunt (PK, INT, AUTO_INCREMENT)</li>
+                <li>isbn (FK → LIVRE)</li>
+                <li>num_membre (FK → MEMBRE)</li>
+                <li>date_emprunt (DATETIME)</li>
+                <li>date_retour (DATE)</li>
+                <li>rendu (BOOLEAN, default FALSE)</li>
+            </ul>
+        </div>
+
+        <div class="bg-yellow-100 p-4 rounded-lg">
+            <p class="font-bold">✏️ Questions :</p>
+            <ol class="list-decimal pl-5">
+                <li>Écrivez les instructions CREATE TABLE</li>
+                <li>Ajoutez les contraintes FOREIGN KEY</li>
+                <li>Insérez 3 livres et 2 membres</li>
+                <li>Insérez 2 emprunts</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 46 : CORRECTION EXERCICE SQL N°1 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Correction : Création bibliothèque
+    </h2>
+
+    <pre class="text-xs bg-gray-800 text-white p-4 rounded-lg overflow-auto max-h-96">
+-- Création des tables
+CREATE TABLE livre (
+    isbn VARCHAR(20) PRIMARY KEY,
+    titre VARCHAR(200) NOT NULL,
+    auteur VARCHAR(100),
+    annee INT,
+    disponible BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE membre (
+    num_membre INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    date_adhesion DATE
+);
+
+CREATE TABLE emprunt (
+    num_emprunt INT PRIMARY KEY AUTO_INCREMENT,
+    isbn VARCHAR(20),
+    num_membre INT,
+    date_emprunt DATETIME,
+    date_retour DATE,
+    rendu BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (isbn) REFERENCES livre(isbn),
+    FOREIGN KEY (num_membre) REFERENCES membre(num_membre)
+);
+
+-- Insertion de données
+INSERT INTO livre (isbn, titre, auteur, annee) VALUES
+    ('978-2-1234-5678-9', 'Le Petit Prince', 'Saint-Exupéry', 1943),
+    ('978-2-8765-4321-0', '1984', 'George Orwell', 1949),
+    ('978-2-9987-6543-2', 'Dune', 'Frank Herbert', 1965);
+
+INSERT INTO membre (nom, prenom, email, date_adhesion) VALUES
+    ('Dupont', 'Jean', 'jean@email.com', '2024-01-15'),
+    ('Martin', 'Marie', 'marie@email.com', '2024-02-01');
+
+INSERT INTO emprunt (isbn, num_membre, date_emprunt, date_retour) VALUES
+    ('978-2-1234-5678-9', 1, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY)),
+    ('978-2-8765-4321-0', 2, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY));</pre>
+</div>
+
+<!-- SLIDE 47 : EXERCICE SQL N°2 - Requêtes -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-pencil"></i>
+        Exercice SQL n°2 : Requêtes
+    </h2>
+
+    <div class="bg-emerald-50 p-8 rounded-2xl shadow-lg">
+        <h3 class="text-2xl font-bold mb-4">📌 Requêtes sur la bibliothèque</h3>
+        
+        <p class="mb-4">Écrivez les requêtes SQL pour :</p>
+
+        <ol class="list-decimal pl-5 space-y-3">
+            <li>Afficher tous les livres</li>
+            <li>Afficher les livres disponibles</li>
+            <li>Afficher les emprunts en cours (non retournés)</li>
+            <li>Afficher les emprunts avec les noms des membres et titres des livres</li>
+            <li>Compter le nombre d'emprunts par membre</li>
+            <li>Trouver le membre qui a emprunté le plus de livres</li>
+            <li>Mettre à jour le statut d'un emprunt (rendu = TRUE)</li>
+            <li>Supprimer un membre (et ses emprunts ?)</li>
+        </ol>
+
+        <div class="mt-6 bg-yellow-100 p-4 rounded-lg">
+            <p class="font-bold">💡 Indice :</p>
+            <p>Pensez aux jointures (JOIN), aux fonctions d'agrégation (COUNT, MAX) et à WHERE.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 48 : CORRECTION EXERCICE SQL N°2 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Correction : Requêtes bibliothèque
+    </h2>
+
+    <pre class="text-xs bg-gray-800 text-white p-4 rounded-lg overflow-auto max-h-96">
+-- 1. Afficher tous les livres
+SELECT * FROM livre;
+
+-- 2. Afficher les livres disponibles
+SELECT * FROM livre WHERE disponible = TRUE;
+
+-- 3. Afficher les emprunts en cours
+SELECT * FROM emprunt WHERE rendu = FALSE;
+
+-- 4. Emprunts avec noms et titres
+SELECT e.num_emprunt, m.nom, m.prenom, l.titre, e.date_emprunt
+FROM emprunt e
+JOIN membre m ON e.num_membre = m.num_membre
+JOIN livre l ON e.isbn = l.isbn
+WHERE e.rendu = FALSE;
+
+-- 5. Compter les emprunts par membre
+SELECT m.nom, m.prenom, COUNT(e.num_emprunt) as nb_emprunts
+FROM membre m
+LEFT JOIN emprunt e ON m.num_membre = e.num_membre
+GROUP BY m.num_membre;
+
+-- 6. Membre qui a emprunté le plus
+SELECT m.nom, m.prenom, COUNT(e.num_emprunt) as nb_emprunts
+FROM membre m
+JOIN emprunt e ON m.num_membre = e.num_membre
+GROUP BY m.num_membre
+ORDER BY nb_emprunts DESC
+LIMIT 1;
+
+-- 7. Mettre à jour un emprunt (retour)
+UPDATE emprunt SET rendu = TRUE, date_retour = CURDATE()
+WHERE num_emprunt = 1;
+
+-- 8. Supprimer un membre (d'abord ses emprunts)
+DELETE FROM emprunt WHERE num_membre = 1;
+DELETE FROM membre WHERE num_membre = 1;</pre>
+</div>
+
+<!-- SLIDE 49 : EXERCICE SQL N°3 - Gestion de stock -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8 flex items-center gap-4">
+        <i class="fa-sharp fa-solid fa-pencil"></i>
+        Exercice SQL n°3 : Gestion de stock
+    </h2>
+
+    <div class="bg-emerald-50 p-8 rounded-2xl shadow-lg">
+        <h3 class="text-2xl font-bold mb-4">📦 Gestion de stock</h3>
+        
+        <p class="mb-4">Soit les tables suivantes :</p>
+
+        <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg mb-4">
+produit (code_produit, nom, prix, stock, seuil_alerte, code_categ)
+categorie (code_categ, nom_categ)
+fournisseur (num_fournisseur, nom, telephone)
+commande (num_commande, date_commande, num_fournisseur)
+ligne_commande (num_commande, code_produit, quantite, prix_achat)</pre>
+
+        <p class="font-bold mb-2">Écrivez les requêtes pour :</p>
+        <ol class="list-decimal pl-5 space-y-1 text-sm">
+            <li>Créer les tables avec les contraintes</li>
+            <li>Afficher les produits en stock faible (stock < seuil_alerte)</li>
+            <li>Afficher le nombre de produits par catégorie</li>
+            <li>Afficher les commandes d'un fournisseur</li>
+            <li>Augmenter tous les prix de 5%</li>
+            <li>Supprimer un produit (vérifier les dépendances)</li>
+        </ol>
+    </div>
+</div>
+
+<!-- SLIDE 50 : CORRECTION EXERCICE SQL N°3 -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        Correction : Gestion de stock
+    </h2>
+
+    <pre class="text-xs bg-gray-800 text-white p-4 rounded-lg overflow-auto max-h-96">
+-- 1. Création des tables
+CREATE TABLE categorie (
+    code_categ INT PRIMARY KEY AUTO_INCREMENT,
+    nom_categ VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE produit (
+    code_produit INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(100) NOT NULL,
+    prix DECIMAL(10,2) CHECK (prix >= 0),
+    stock INT DEFAULT 0,
+    seuil_alerte INT DEFAULT 5,
+    code_categ INT,
+    FOREIGN KEY (code_categ) REFERENCES categorie(code_categ)
+);
+
+CREATE TABLE fournisseur (
+    num_fournisseur INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(100) NOT NULL,
+    telephone VARCHAR(20)
+);
+
+CREATE TABLE commande (
+    num_commande INT PRIMARY KEY AUTO_INCREMENT,
+    date_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
+    num_fournisseur INT,
+    FOREIGN KEY (num_fournisseur) REFERENCES fournisseur(num_fournisseur)
+);
+
+CREATE TABLE ligne_commande (
+    num_commande INT,
+    code_produit INT,
+    quantite INT CHECK (quantite > 0),
+    prix_achat DECIMAL(10,2),
+    PRIMARY KEY (num_commande, code_produit),
+    FOREIGN KEY (num_commande) REFERENCES commande(num_commande),
+    FOREIGN KEY (code_produit) REFERENCES produit(code_produit)
+);
+
+-- 2. Produits en stock faible
+SELECT * FROM produit WHERE stock < seuil_alerte;
+
+-- 3. Nombre de produits par catégorie
+SELECT c.nom_categ, COUNT(p.code_produit) as nb_produits
+FROM categorie c
+LEFT JOIN produit p ON c.code_categ = p.code_categ
+GROUP BY c.code_categ;
+
+-- 4. Commandes d'un fournisseur
+SELECT c.num_commande, c.date_commande, p.nom, lc.quantite
+FROM commande c
+JOIN ligne_commande lc ON c.num_commande = lc.num_commande
+JOIN produit p ON lc.code_produit = p.code_produit
+WHERE c.num_fournisseur = 1;
+
+-- 5. Augmenter tous les prix de 5%
+UPDATE produit SET prix = prix * 1.05;
+
+-- 6. Supprimer un produit (d'abord les lignes de commande)
+DELETE FROM ligne_commande WHERE code_produit = 1;
+DELETE FROM produit WHERE code_produit = 1;</pre>
+</div>
+
+<!-- SLIDE 51 : RÉCAPITULATIF SQL -->
+<div class="slide">
+    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
+        📋 Récapitulatif SQL
+    </h2>
+
+    <div class="grid grid-cols-3 gap-4">
+        <div class="bg-blue-50 p-4 rounded-xl">
+            <h3 class="font-bold text-lg mb-2 text-blue-600">LDD</h3>
+            <ul class="space-y-1 text-sm">
+                <li><code>CREATE DATABASE</code></li>
+                <li><code>CREATE TABLE</code></li>
+                <li><code>ALTER TABLE</code></li>
+                <li><code>DROP TABLE</code></li>
+                <li><code>TRUNCATE</code></li>
+            </ul>
+        </div>
+
+        <div class="bg-green-50 p-4 rounded-xl">
+            <h3 class="font-bold text-lg mb-2 text-green-600">LMD</h3>
+            <ul class="space-y-1 text-sm">
+                <li><code>INSERT INTO</code></li>
+                <li><code>UPDATE</code></li>
+                <li><code>DELETE</code></li>
+                <li><code>SELECT</code></li>
+            </ul>
+        </div>
+
+        <div class="bg-purple-50 p-4 rounded-xl">
+            <h3 class="font-bold text-lg mb-2 text-purple-600">Mots-clés</h3>
+            <ul class="space-y-1 text-sm">
+                <li><code>WHERE</code>, <code>JOIN</code></li>
+                <li><code>GROUP BY</code>, <code>HAVING</code></li>
+                <li><code>ORDER BY</code>, <code>LIMIT</code></li>
+                <li><code>COUNT</code>, <code>AVG</code>, <code>SUM</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-6 bg-emerald-600 text-white p-6 rounded-xl">
+        <p class="text-center text-lg font-bold">🎯 Félicitations ! Vous maîtrisez maintenant :</p>
+        <div class="grid grid-cols-2 gap-2 mt-3 text-sm">
+            <div>✓ La création de bases de données</div>
+            <div>✓ La création de tables</div>
+            <div>✓ Les contraintes (PK, FK, etc.)</div>
+            <div>✓ L'insertion de données</div>
+            <div>✓ Les requêtes SELECT</div>
+            <div>✓ Les jointures (JOIN)</div>
+            <div>✓ Les modifications (UPDATE)</div>
+            <div>✓ Les suppressions (DELETE)</div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 52 : CONCLUSION GÉNÉRALE -->
+<div class="slide">
+    <div class="text-center">
+        <i class="fa-sharp fa-solid fa-graduation-cap text-8xl text-emerald-600 mb-6"></i>
+        <h1 class="text-5xl font-extrabold mb-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-transparent bg-clip-text">
+            Félicitations !
+        </h1>
+        <p class="text-2xl mb-6">Vous avez complété le cours complet sur les Bases de Données</p>
+        
+        <div class="max-w-2xl mx-auto bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-8 rounded-2xl shadow-xl">
+            <p class="text-xl mb-4">Ce que vous avez appris :</p>
+            <div class="grid grid-cols-2 gap-4 text-left">
+                <div>✓ Concepts des BD</div>
+                <div>✓ Méthode MERISE</div>
+                <div>✓ MCD (entités, associations)</div>
+                <div>✓ MLD (tables, clés)</div>
+                <div>✓ SGBD et MySQL</div>
+                <div>✓ LDD (CREATE, ALTER, DROP)</div>
+                <div>✓ LMD (INSERT, UPDATE, DELETE)</div>
+                <div>✓ Requêtes SELECT</div>
+                <div>✓ Jointures (JOIN)</div>
+                <div>✓ Fonctions d'agrégation</div>
+                <div>✓ Exercices pratiques</div>
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-center gap-4">
+            <i class="fa-sharp fa-solid fa-database text-4xl text-emerald-600"></i>
+            <i class="fa-sharp fa-solid fa-diagram-project text-4xl text-teal-600"></i>
+            <i class="fa-sharp fa-solid fa-code text-4xl text-cyan-600"></i>
+        </div>
+
+        <p class="mt-6 text-gray-600">
+            Vous êtes maintenant prêt à concevoir et manipuler des bases de données !
+        </p>
+    </div>
+</div>
+           
+        <!-- ==================== NAVIGATION ==================== -->
+        <div class="bg-gradient-to-r from-emerald-800 to-teal-600 p-4 flex justify-between items-center text-white shadow-inner">
+            <button id="prevBtn" class="bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl font-semibold hover:bg-white/30 transition-all duration-300">
+                <i class="fa-regular fa-arrow-left mr-2"></i>
+                Précédent
+            </button>
+
+            <span id="counter" class="text-lg font-semibold tracking-wide"></span>
+
+            <button id="nextBtn" class="bg-white text-emerald-700 px-6 py-2 rounded-xl font-semibold hover:scale-105 transition-all duration-300 shadow-md">
+                Suivant
+                <i class="fa-regular fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll(".slide");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const counter = document.getElementById("counter");
+        let index = 0;
+
+        function showSlide(i) {
+            slides.forEach((s, idx) => {
+                if (idx === i) {
+                    s.classList.add("active");
+                } else {
+                    s.classList.remove("active");
+                }
+            });
+            counter.textContent = `Diapositive ${i + 1} / ${slides.length}`;
+            prevBtn.disabled = i === 0;
+            nextBtn.disabled = i === slides.length - 1;
+            
+            // Style pour les boutons désactivés
+            prevBtn.style.opacity = i === 0 ? "0.5" : "1";
+            nextBtn.style.opacity = i === slides.length - 1 ? "0.5" : "1";
+        }
+
+        prevBtn.onclick = () => {
+            if (index > 0) {
+                index--;
+                showSlide(index);
+            }
+        };
+
+        nextBtn.onclick = () => {
+            if (index < slides.length - 1) {
+                index++;
+                showSlide(index);
+            }
+        };
+
+        // Navigation avec les touches du clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            }
+        });
+
+        showSlide(index);
+    </script>
+</body>
+</html>
