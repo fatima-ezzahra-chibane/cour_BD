@@ -2208,38 +2208,38 @@ DELETE FROM etudiant;</pre>
 <!-- SLIDE 43 : SELECT avec JOIN -->
 <div class="slide">
     <h2 class="text-4xl font-bold text-emerald-700 mb-8">
-        Les jointures (JOIN)
+        INNER JOIN
     </h2>
 
     <div class="bg-emerald-50 p-6 rounded-2xl">
-        <p class="text-lg mb-4">Les jointures permettent d'interroger plusieurs tables à la fois.</p>
+        <p class="text-lg mb-4">
+            INNER JOIN permet de récupérer uniquement les données qui ont une correspondance entre deux tables.
+        </p>
 
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                <h3 class="text-xl font-bold mb-3">INNER JOIN</h3>
-                <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+        <div>
+            <h3 class="text-xl font-bold mb-3">Exemple 1</h3>
+            <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
 SELECT e.nom, e.prenom, c.nom_classe
 FROM etudiant e
 INNER JOIN classe c 
     ON e.num_classe = c.num_classe;</pre>
-            </div>
+        </div>
 
-            <div>
-                <h3 class="text-xl font-bold mb-3">LEFT JOIN</h3>
-                <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
-SELECT e.nom, c.nom_classe
+        <div class="mt-4">
+            <h3 class="text-xl font-bold mb-3">Exemple 2</h3>
+            <pre class="text-xs bg-gray-800 text-white p-3 rounded-lg">
+SELECT e.nom, n.note
 FROM etudiant e
-LEFT JOIN classe c 
-    ON e.num_classe = c.num_classe;</pre>
-            </div>
+INNER JOIN note n 
+    ON e.id_etudiant = n.id_etudiant;</pre>
         </div>
 
         <div class="mt-4 bg-white p-4 rounded">
             <p class="font-bold">📌 Explication :</p>
             <ul class="list-disc pl-5">
-                <li><strong>INNER JOIN</strong> : uniquement les correspondances</li>
-                <li><strong>LEFT JOIN</strong> : tous les étudiants, même sans classe</li>
-                <li><strong>RIGHT JOIN</strong> : toutes les classes, même vides</li>
+                <li>INNER JOIN retourne seulement les lignes qui existent dans les deux tables</li>
+                <li>Si une correspondance n’existe pas, la ligne est ignorée</li>
+                <li>On utilise ON pour définir la condition de liaison</li>
             </ul>
         </div>
     </div>
@@ -2276,17 +2276,11 @@ GROUP BY code_cours;
 -- Max et Min
 SELECT MAX(prix), MIN(prix) FROM produit;
 
--- Avec condition
-SELECT classe, COUNT(*) as effectif
-FROM etudiant
-GROUP BY classe
-HAVING COUNT(*) > 10;</pre>
+</pre>
         </div>
     </div>
 
-    <div class="mt-4 bg-yellow-50 p-3 rounded">
-        <p><strong>💡 GROUP BY</strong> : regroupe les lignes | <strong>HAVING</strong> : filtre les groupes (comme WHERE pour GROUP BY)</p>
-    </div>
+   
 </div>
 
 <!-- ==================== SECTION 12 : EXERCICES SQL ==================== -->
@@ -2350,55 +2344,6 @@ HAVING COUNT(*) > 10;</pre>
     </div>
 </div>
 
-<!-- SLIDE 46 : CORRECTION EXERCICE SQL N°1 -->
-<div class="slide">
-    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
-        Correction : Création bibliothèque
-    </h2>
-
-    <pre class="text-xs bg-gray-800 text-white p-4 rounded-lg overflow-auto max-h-96">
--- Création des tables
-CREATE TABLE livre (
-    isbn VARCHAR(20) PRIMARY KEY,
-    titre VARCHAR(200) NOT NULL,
-    auteur VARCHAR(100),
-    annee INT,
-    disponible BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE membre (
-    num_membre INT PRIMARY KEY AUTO_INCREMENT,
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50),
-    email VARCHAR(100) UNIQUE,
-    date_adhesion DATE
-);
-
-CREATE TABLE emprunt (
-    num_emprunt INT PRIMARY KEY AUTO_INCREMENT,
-    isbn VARCHAR(20),
-    num_membre INT,
-    date_emprunt DATETIME,
-    date_retour DATE,
-    rendu BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (isbn) REFERENCES livre(isbn),
-    FOREIGN KEY (num_membre) REFERENCES membre(num_membre)
-);
-
--- Insertion de données
-INSERT INTO livre (isbn, titre, auteur, annee) VALUES
-    ('978-2-1234-5678-9', 'Le Petit Prince', 'Saint-Exupéry', 1943),
-    ('978-2-8765-4321-0', '1984', 'George Orwell', 1949),
-    ('978-2-9987-6543-2', 'Dune', 'Frank Herbert', 1965);
-
-INSERT INTO membre (nom, prenom, email, date_adhesion) VALUES
-    ('Dupont', 'Jean', 'jean@email.com', '2024-01-15'),
-    ('Martin', 'Marie', 'marie@email.com', '2024-02-01');
-
-INSERT INTO emprunt (isbn, num_membre, date_emprunt, date_retour) VALUES
-    ('978-2-1234-5678-9', 1, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY)),
-    ('978-2-8765-4321-0', 2, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY));</pre>
-</div>
 
 <!-- SLIDE 47 : EXERCICE SQL N°2 - Requêtes -->
 <div class="slide">
@@ -2430,51 +2375,6 @@ INSERT INTO emprunt (isbn, num_membre, date_emprunt, date_retour) VALUES
     </div>
 </div>
 
-<!-- SLIDE 48 : CORRECTION EXERCICE SQL N°2 -->
-<div class="slide">
-    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
-        Correction : Requêtes bibliothèque
-    </h2>
-
-    <pre class="text-xs bg-gray-800 text-white p-4 rounded-lg overflow-auto max-h-96">
--- 1. Afficher tous les livres
-SELECT * FROM livre;
-
--- 2. Afficher les livres disponibles
-SELECT * FROM livre WHERE disponible = TRUE;
-
--- 3. Afficher les emprunts en cours
-SELECT * FROM emprunt WHERE rendu = FALSE;
-
--- 4. Emprunts avec noms et titres
-SELECT e.num_emprunt, m.nom, m.prenom, l.titre, e.date_emprunt
-FROM emprunt e
-JOIN membre m ON e.num_membre = m.num_membre
-JOIN livre l ON e.isbn = l.isbn
-WHERE e.rendu = FALSE;
-
--- 5. Compter les emprunts par membre
-SELECT m.nom, m.prenom, COUNT(e.num_emprunt) as nb_emprunts
-FROM membre m
-LEFT JOIN emprunt e ON m.num_membre = e.num_membre
-GROUP BY m.num_membre;
-
--- 6. Membre qui a emprunté le plus
-SELECT m.nom, m.prenom, COUNT(e.num_emprunt) as nb_emprunts
-FROM membre m
-JOIN emprunt e ON m.num_membre = e.num_membre
-GROUP BY m.num_membre
-ORDER BY nb_emprunts DESC
-LIMIT 1;
-
--- 7. Mettre à jour un emprunt (retour)
-UPDATE emprunt SET rendu = TRUE, date_retour = CURDATE()
-WHERE num_emprunt = 1;
-
--- 8. Supprimer un membre (d'abord ses emprunts)
-DELETE FROM emprunt WHERE num_membre = 1;
-DELETE FROM membre WHERE num_membre = 1;</pre>
-</div>
 
 <!-- SLIDE 49 : EXERCICE SQL N°3 - Gestion de stock -->
 <div class="slide">
@@ -2507,75 +2407,7 @@ ligne_commande (num_commande, code_produit, quantite, prix_achat)</pre>
     </div>
 </div>
 
-<!-- SLIDE 50 : CORRECTION EXERCICE SQL N°3 -->
-<div class="slide">
-    <h2 class="text-4xl font-bold text-emerald-700 mb-8">
-        Correction : Gestion de stock
-    </h2>
 
-    <pre class="text-xs bg-gray-800 text-white p-4 rounded-lg overflow-auto max-h-96">
--- 1. Création des tables
-CREATE TABLE categorie (
-    code_categ INT PRIMARY KEY AUTO_INCREMENT,
-    nom_categ VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE produit (
-    code_produit INT PRIMARY KEY AUTO_INCREMENT,
-    nom VARCHAR(100) NOT NULL,
-    prix DECIMAL(10,2) CHECK (prix >= 0),
-    stock INT DEFAULT 0,
-    seuil_alerte INT DEFAULT 5,
-    code_categ INT,
-    FOREIGN KEY (code_categ) REFERENCES categorie(code_categ)
-);
-
-CREATE TABLE fournisseur (
-    num_fournisseur INT PRIMARY KEY AUTO_INCREMENT,
-    nom VARCHAR(100) NOT NULL,
-    telephone VARCHAR(20)
-);
-
-CREATE TABLE commande (
-    num_commande INT PRIMARY KEY AUTO_INCREMENT,
-    date_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
-    num_fournisseur INT,
-    FOREIGN KEY (num_fournisseur) REFERENCES fournisseur(num_fournisseur)
-);
-
-CREATE TABLE ligne_commande (
-    num_commande INT,
-    code_produit INT,
-    quantite INT CHECK (quantite > 0),
-    prix_achat DECIMAL(10,2),
-    PRIMARY KEY (num_commande, code_produit),
-    FOREIGN KEY (num_commande) REFERENCES commande(num_commande),
-    FOREIGN KEY (code_produit) REFERENCES produit(code_produit)
-);
-
--- 2. Produits en stock faible
-SELECT * FROM produit WHERE stock < seuil_alerte;
-
--- 3. Nombre de produits par catégorie
-SELECT c.nom_categ, COUNT(p.code_produit) as nb_produits
-FROM categorie c
-LEFT JOIN produit p ON c.code_categ = p.code_categ
-GROUP BY c.code_categ;
-
--- 4. Commandes d'un fournisseur
-SELECT c.num_commande, c.date_commande, p.nom, lc.quantite
-FROM commande c
-JOIN ligne_commande lc ON c.num_commande = lc.num_commande
-JOIN produit p ON lc.code_produit = p.code_produit
-WHERE c.num_fournisseur = 1;
-
--- 5. Augmenter tous les prix de 5%
-UPDATE produit SET prix = prix * 1.05;
-
--- 6. Supprimer un produit (d'abord les lignes de commande)
-DELETE FROM ligne_commande WHERE code_produit = 1;
-DELETE FROM produit WHERE code_produit = 1;</pre>
-</div>
 
 <!-- SLIDE 51 : RÉCAPITULATIF SQL -->
 <div class="slide">
